@@ -1,0 +1,235 @@
+@import url('https://fonts.googleapis.com/css?family=Poppins:400,500,700');
+
+
+
+
+.navbar-brand img{
+  height: 150px;
+      
+}
+
+.navbar-nav li{
+  padding-right: 20px;
+}
+
+.nav-link{
+  font-size: 1.1em !important;
+}
+
+.carousel-inner img {
+  width: 100%;
+  height: 850px;
+}
+.carousel-caption{
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+}
+.carousel-caption h1{
+  font-size: 500%;
+  text-transform: uppercase;
+  text-shadow: 1px 1px 15px #000;
+}
+.carousel-caption h3{
+  font-size: 200%;
+  font-weight: 500%;
+  text-shadow: 1px 1px 10px #000;
+  padding-bottom: 1rem;
+}
+
+.btn-outline-light:hover{
+  background-color: #0066CC;
+  border: 1px solid #563d7c;
+}
+
+/* ADD STUDENT */
+
+#add_main{
+	  background-image: url("background3.jpg");
+	  height: 850px;
+    background-repeat: no-repeat;
+    background-size: cover;
+}
+ 
+
+input[type=text] {
+    width: 20%;
+    height: 8%;
+    padding: 0 0 4px 0;
+    margin: 7px 0 7px 0;
+    box-sizing: border-box;
+    border: 3px solid #ccc;
+    -webkit-transition: 0.5s;
+    transition: 0.5s;
+    outline: none;
+    
+}
+
+input[type=text]:focus {
+    border: 1px solid #0066CC;
+ }
+
+.add_head{	
+	padding-top: 50px;
+  color: #87CEEB;
+}
+#add_main h1, h5{	
+	color: #ADD8E6;
+	font: Arial, Helvetica,sans-serif;
+}
+
+.main label{
+  color:  white;
+  font: Arial, Helvetica,sans-serif;	
+	margin-left: 50px;
+	float:center;
+	font-size: 20px;
+}
+
+.add_form{
+  padding-top: 20px;
+}
+
+.add_form #IDNum{
+  padding-right: 87px;
+}
+.add_form #FName{
+  padding-right: 44px;
+}
+.add_form #LName{
+  padding-right: 43px;
+}
+.add_form #MName{
+  padding-right: 20px;
+}
+.add_form #Sex{
+  padding-right: 116px;
+}
+.add_form #course{
+  padding-right: 78px;
+}
+.add_form #Yr{
+  padding-right: 50px;
+}
+
+.add_btn{
+  float: center;
+  
+}
+#add_submit{
+  margin-bottom: 20px;
+}
+
+/*  DELETE STUDENT */
+
+#delete_main{
+    background-image: url("background5.jpg");
+    height: 850px;
+    background-repeat: no-repeat;
+    background-size: cover;
+    
+}
+
+.delete_form #IDNum{
+  padding-right: 20px;
+}
+.delete_head{  
+  margin-top: 50px;
+  padding-left: 180px;
+  color: #001f3f;
+}
+.delete_form{
+  margin-top: 10px;
+  
+}
+.delete_btn{
+ margin-bottom: 80px;
+  margin-left: 175px;
+  float: center;
+}
+#delete_submit{
+  margin-left: 170px;
+  float: center;
+}
+
+/*DELETE_Table*/
+
+
+#stud_table td, #stud_table th{
+    width: 1150px;
+    border: 1px solid #ddd;
+    padding: 10px;
+}
+#stud_table tr:nth-child(even){background-color: white;}
+#stud_table tr:nth-child(odd){background-color: #cccccc;}
+#stud_table tr:hover {background-color: navajowhite;}
+
+#stud_table th{
+    padding-top: 12px;
+    padding-bottom: 12px;
+    text-align: left;
+    background-color: #001f3f;
+    color: white;
+}
+
+/*UPDATE*/
+#update_main{
+    background-image: url("background7.jpg");
+    height: 850px;
+    background-repeat: no-repeat;
+    background-size: cover;
+    
+}
+#stud_table_update{
+  margin-top: 10px;
+}
+
+.update_res_head{  
+  margin-bottom: 50px;
+  padding-left: 180px;
+  color: #001f3f;
+}
+
+.add_form #ID-Old{
+  margin-right: 48px;
+}
+.add_form #ID-New{
+  margin-right: 5px;
+}
+
+/* SEARCH */
+#search_main{
+    background-image: url("background2.jpg");
+    height: 850px;
+    background-repeat: no-repeat;
+    background-size: cover;
+    
+}
+
+
+/*STUDENT TABLE*/
+#stud_table_main{
+    background-image: url("background1.jpeg");
+    height: 850px;
+    background-repeat: no-repeat;
+    background-size: cover;
+    
+}
+
+#stud_table_cancel{
+  margin-bottom: 40px;
+}
+#stud_table_main h1{
+  color: white;
+}
+
+footer{
+  background-color: #222;
+  color: #d5d5d5;
+  padding-top: 2rem;
+}
+.foot-link{
+color: red;
+}
+
+

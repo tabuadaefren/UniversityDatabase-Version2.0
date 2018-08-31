@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+
+<html lang="en">
+
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title>Update Student | Epin</title>
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"></script>
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+	<script src="https://use.fontawesome.com/releases/v5.0.8/js/all.js"></script>
+	
+	<link href="../css/style.css" rel="stylesheet">
+	<link href="../css/style1.css" rel="stylesheet">
+</head>
+
+<body>
+
+
+<center>
+
+<nav class="navbar navbar-expand-md navbar-light bg-light ">
+<div class="container-fluid">
+	<a class="navbar-brand" href="#"><img src="../img/logo.png"></a>
+		
+		<ul class="navbar-nav ml-auto">
+			<li class="nav-item">
+				<a class="nav-link" href="#">Home  | </a>
+			</li>
+			<li class="nav-item">
+				<a class="nav-link" href="#">Student Table  | </a>
+			</li>
+			<li class="nav-item">
+				<a class="nav-link" href="#">Assignment 2  | </a>
+			</li><li class="nav-item">
+				<a class="nav-link" href="#">Final Project </a>
+			</li>
+			
+		</ul>
+
+	
+</div>
+</nav>
+
+<div class="carousel-inner main" id="update_main">
+
+<div class="update_res_head">
+	<h1 class="add_head">Edit Student Information:</h1>
+</div>
+
+<div>
+            
+        <table id="stud_table" style="width:80%">
+
+  			<tr>
+  				<th>ID Number</th>
+  				<th>First Name</th>
+    			<th>Middle Name</th>
+    			<th>Last Name</th> 
+    			<th>Sex</th>
+    			<th>Course</th>
+    			<th>Year Level</th> 
+    			
+  			</tr>
+  			<tr>
+  				<td>2014-7784</td>
+    			<td>Efren</td> 
+    			<td>Masicampo</td>
+    			<td>Tabuada</td>
+    			<td>Male</td> 
+    			<td>BS Cpe</td>
+    			<td>IV</td>
+  			</tr>
+  			
+			</table>
+    </div>
+
+<div class="add_form">    
+    <form action="{{url_for('adding')}}" method = "post">
+
+          <label id="IDNum">ID No. :</label>
+          <input type="text" name = "id_number" placeholder="Ex. 2014-1234 ,   . . ." align="left" required>
+          
+          <br>
+          <label id="FName">First Name:</label>
+          <input type="text" name="firstname" placeholder="Ex. Juan ,   . . ." align="right" required>
+          <br>
+          <label id="LName">Last Name:</label>
+          <input type="text" name="lastname" placeholder="Ex. De la Cruz ,   . . ." align="right" required>
+          <br>
+          <label id="MName">Middle Name:</label>
+          <input type="text" name= "Middle" placeholder="Ex.  Rivera ,   . . ." align="right" required>
+          <br>
+          <label id="Sex">Sex:</label>
+          <input type="text" name = "Sex" placeholder="Ex. Male ,   . . ." align="right" required>
+          <br>
+          <label id="course">Course:</label>
+          <input type="text" name= "Course" placeholder="Ex. BS CpE ,   . . ." align="right" required>
+          <br>
+          <label id="Yr">Year Level:</label>
+          <input type="text" name= "Year" placeholder="Ex. IV ,   . . ." align="right" required>
+          <br>
+          <br><br>
+      </form>
+</div>
+<div class="add_btn">
+	<button class="btn btn-outline-light btn-lg" id="add_submit">Update Student</button>
+
+      <br>
+     <button class="btn btn-outline-light btn-lg" id="add_cancel" onclick="window.location.href='/course_mangr'">Back</button>
+</div>
+	
+</div>
+
+</center>
+
+
+</body>
+
+<footer>
+	
+</footer>
+
+
+</html>
