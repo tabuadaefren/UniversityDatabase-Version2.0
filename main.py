@@ -5,6 +5,8 @@ app = Flask(__name__)
 
 
 # INITIAL DATABASE CREATION
+
+#Create  student Table
 conn = sql.connect('database.db')
 conn.execute('''CREATE TABLE IF NOT EXISTS student(
     IDNum TEXT PRIMARY KEY  NOT NULL, 
@@ -15,7 +17,18 @@ conn.execute('''CREATE TABLE IF NOT EXISTS student(
     Course TEXT, 
     YrLevel INTEGER)''')
 
+#conn.execute('''CREATE TABLE IF NOT EXISTS student(
+#    IDNum TEXT PRIMARY KEY  NOT NULL, 
+#    FName TEXT, 
+#    MName TEXT,
+#    LName TEXT, 
+#    Sex TEXT, 
+#    Course TEXT, 
+#    YrLevel INTEGER)''')
+
 conn.close()
+
+#Create course Table
 
 # -- HOME PAGE --
 @app.route("/",methods = ['POST','GET'])
@@ -42,12 +55,12 @@ def add_submit():
     if request.method == "POST":
         try:
             id_number = request.form['ID_Num']
-            firstname = request.form['F_Name']
-            middle = request.form['M_Name']
-            lastname = request.form['L_Name']
-            sex =request.form['sex']
-            course = request.form['course']
-            Yr = request.form['Yr_Level']
+            firstname = request.form['F_Name'].upper()
+            middle = request.form['M_Name'].upper()
+            lastname = request.form['L_Name'].upper()
+            sex =request.form['sex'].upper()
+            course = request.form['course'].upper()
+            Yr = request.form['Yr_Level'].upper()
             
             with sql.connect("database.db") as conn:
                 cur = conn.cursor()
@@ -111,8 +124,6 @@ def delete_result():
                     else:
                         flag=0
                         msg = "Error! Student not found."
-                        
-                        
         except:
             msg = "Fail to delete"
             
@@ -176,19 +187,30 @@ def update_submit():
     if request.method =="POST":
         try:
             id_old = request.form['ID_old']
-            firstname = request.form['F_Name']
-            lastname = request.form['L_Name']
-            middle = request.form['M_Name']
-            sex = request.form['sex']
-            course = request.form['course']
-            Yr = request.form['Yr_Level']
+            firstname = request.form['F_Name'].upper()
+            lastname = request.form['L_Name'].upper()
+            middle = request.form['M_Name'].upper()
+            sex = request.form['sex'].upper()
+            course = request.form['course'].upper()
+            Yr = request.form['Yr_Level'].upper()
             
             with sql.connect("database.db") as conn:
                 cur = conn.cursor()
                 cur.execute("SELECT * FROM student")
                 for row in cur.fetchall():
                     if row[0] == id_old:
-                        cur.execute("UPDATE student set FName = ?, LName = ?, MName = ?,  Sex = ?, Course = ?, YrLevel = ? where IDNum = ?",( firstname, lastname, middle, sex, course,Yr,id_old))
+                        if(len(firstname)>0):
+                            cur.execute("UPDATE student set FName = ? where IDNum = ?",( firstname, id_old))
+                        if(len(lastname)>0):
+                            cur.execute("UPDATE student set LName = ? where IDNum = ?",( lastname, id_old))
+                        if(len(middle)>0):
+                            cur.execute("UPDATE student set MName = ? where IDNum = ?",( middle, id_old))
+                        if(len(sex)>0):
+                            cur.execute("UPDATE student set Sex = ? where IDNum = ?",( sex, id_old))
+                        if(len(course)>0):
+                            cur.execute("UPDATE student set Course = ? where IDNum = ?",( course, id_old))
+                        if(len(Yr)>0):
+                            cur.execute("UPDATE student set YrLevel = ? where IDNum = ?",( Yr, id_old))
                         conn.commit()
                         msg = "successfully UPDATED"
                         break
@@ -214,33 +236,40 @@ def search():
 def search_input():
     if request.method == "POST":
         try:
-            print "trial entered"
+            print("try entered")
             count=0
-            SearchKey = request.form['SearchKey']
-            print SearchKey
+            SearchKey = request.form['SearchKey'].upper()
+            print(SearchKey)
             with sql.connect("database.db") as conn:
                 cur = conn.cursor()
-                print "sql execute"
+                print("sql execute")
                 cur.execute("SELECT * FROM student where IDNum = ? or FName = ? or LName=? or MName=?  or Sex=? or YrLevel=? or Course=?", (SearchKey, SearchKey, SearchKey, SearchKey, SearchKey, SearchKey, SearchKey ))
-                print "search database"
+                print("finish search database")
                 row = cur.fetchall()
-                print "entered in success"
-                print row
-                msg = "Search successful!"
+                print("entered in success")
+                print(row)
+                print(len(row))
         except:
-            print "entered in failed"
-            msg = "Search failed!"
-            row=" "
+            print("entered in failed")
         finally:
-            return render_template("search_result.html", msg=msg, row=row, )
+            if(len(row)<1):
+                msg="Student not found!"
+                print("entered if")
+                row= " "
+            else:
+                msg="Search successful!"
+                print("entered else")
+            return render_template("search_result.html", msg=msg, row=row,)
             conn.close()
+        
 #---------------------------------------------------
 #End Manage Students
 
 
 
-# Methods for Courses
+# Methods for Manage Courses
 #----------------------------------------------------
+
 # Manage Courses
 @app.route("/courses",methods = ['POST','GET'])
 def indexCourses():
@@ -267,21 +296,21 @@ def add_submit_course():
             Yr = request.form['Yr_Level']
             
             stud = Student(id_number,firstname,lastname,middle,sex,course,Yr)
-            print "array"
+            print("array")
             with sql.connect("database.db") as conn:
-                print "connect"
+                print("connect")
                 cur = conn.cursor()
                 cur.execute("INSERT INTO student(IDNum, FName, LName, MName, Sex, Course,YrLevel) VALUES(?,?,?,?,?,?,?)",
                     (stud.id_no, stud.f_name, stud.l_name, stud.mid, stud.sex, stud.course,stud.Yr))
                 conn.commit()
                 msg= "Adding Successful!"
         except:
-            print " ERROR!"
+            print(" ERROR!")
             conn.rollback()
             msg = "Adding failed! "
 
         finally:
-            print "Final Stage"
+            print("Final Stage")
             conn = sql.connect("database.db")
             conn.row_factory = sql.Row
             cur = conn.cursor()
@@ -319,44 +348,44 @@ def delete_course():
 def delete_result_course():
     if request.method == "POST":
         try:
-            print "entered ID"
+            print("entered ID")
             id_number = request.form['ID_Num']
-            print id_number
+            print(id_number)
             with sql.connect("database.db") as conn:
-                print "connected"
+                print("connected")
                 cur = conn.cursor()
                 cur.execute("SELECT * FROM student")
                 for row in cur.fetchall():
-                    print row
+                    print(row)
                     if row[0] == id_number:
-                        print "partial in del"
+                        print("partial in del")
                         cur.execute("DELETE FROM student WHERE IDNum = ?", (id_number,))
-                        print "before commit"
+                        print("before commit")
                         conn.commit()
-                        print "committed"
+                        print("committed")
                         msg = "Successfully Deleted"
                         flag=1
                         break
                     else:
-                        print "error delete"
+                        print("error delete")
                         flag=0
                         msg = "Error! Student not found."
                         
                         
         except:
             msg = "Fail to delete"
-            print "Failed to delete!"
+            print("Failed to delete!")
         finally:
             if flag == 1:
-                print "flag 1"
+                print("flag 1")
                 conn = sql.connect("database.db")
                 conn.row_factory = sql.Row
                 cur = conn.cursor()
                 cur.execute("SELECT * FROM student")
                 rows = cur.fetchall()
-                print rows
+                print(rows)
             else:
-                print "flag 0"
+                print("flag 0")
                 rows = " "
             return render_template("add_result.html", rows=rows, msg=msg,)
         conn.close()
@@ -378,14 +407,14 @@ def update_search_course():
     if request.method == "POST":
         try:
             id_number = request.form['ID_Num']
-            print "meeeee"
+            print("meeeee")
             with sql.connect("database.db") as conn:
-                print "connected"
+                print("connected")
                 cur = conn.cursor()
                 cur.execute("SELECT * FROM student")
                 for row in cur.fetchall():
                     if row[0] == id_number:
-                        print row
+                        print(row)
                         copied = row
                         msg = " Student Found!"
                         flag = 1
@@ -412,11 +441,11 @@ def update_submit_course():
     if request.method =="POST":
         
         try:
-            print "enter try"
+            print("enter try")
             
             id_old = request.form['ID_old']
             id_new = request.form['ID_Num']
-            print id_old
+            print(id_old)
             firstname = request.form['F_Name']
             lastname = request.form['L_Name']
             middle = request.form['M_Name']
@@ -428,7 +457,7 @@ def update_submit_course():
                 cur = conn.cursor()
                 cur.execute("SELECT * FROM student")
                 for row in cur.fetchall():
-                    print row
+                    print(row)
 
                     if row[0] == id_old:
                         cur.execute("UPDATE student set FName = ?, LName = ?, MName = ?,  Sex = ?, Course = ?, YrLevel = ? where IDNum = ?",
@@ -441,7 +470,7 @@ def update_submit_course():
                         break
                     
         except:
-            print "Fail to update"
+            print("Fail to update")
             msg = "FAIL to UPDATE"
         finally:
             conn = sql.connect("database.db")
@@ -465,20 +494,20 @@ def search_input_course():
         try:
             count=0
             id_number = request.form['ID_Num']
-            print "meeeee"
+            print("meeeee")
             with sql.connect("database.db") as conn:
-                print "connected"
+                print("connected")
                 cur = conn.cursor()
                 cur.execute("SELECT * FROM student")
                 for row in cur.fetchall():
                     if row[0] == id_number:
-                        print row
+                        print(len(row))
                         copied = row
-                        print "search successful"
+                        print("search successful")
                         msg = "Search successful!"
                         break
                     else:
-                        print "Error search"
+                        print("Error search")
                         msg = "Error! Student not found."
                         copied = " "
 
