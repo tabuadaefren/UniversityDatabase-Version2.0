@@ -523,3 +523,4 @@ def search_input_course():
 # End Manage Courses
 if __name__ == "__main__":
     app.run(debug=True)
+    

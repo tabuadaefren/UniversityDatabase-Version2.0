@@ -135,6 +135,11 @@ input[type=text]:focus {
   margin-bottom: 20px;
 }
 
+/**/
+.bg{
+
+}
+
 /*  DELETE STUDENT */
 
 #delete_main{
@@ -239,9 +244,11 @@ input[type=text]:focus {
 /*STUDENT TABLE*/
 #stud_table_main{
     background-image: url("background1.jpeg");
-    height: 660px;
+    height: 90%;
     background-repeat: no-repeat;
     background-size: cover;
+    
+    
     
 }
 
