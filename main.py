@@ -15,16 +15,13 @@ conn.execute('''CREATE TABLE IF NOT EXISTS student(
     LName TEXT, 
     Sex TEXT, 
     Course TEXT, 
-    YrLevel INTEGER)''')
+    YrLevel INTEGER,
+    CONSTRAINT FK_Student_Course FOREIGN KEY (Course) REFERENCES courses(CourseID)''')
 
-#conn.execute('''CREATE TABLE IF NOT EXISTS student(
-#    IDNum TEXT PRIMARY KEY  NOT NULL, 
-#    FName TEXT, 
-#    MName TEXT,
-#    LName TEXT, 
-#    Sex TEXT, 
-#    Course TEXT, 
-#    YrLevel INTEGER)''')
+conn.execute('''CREATE TABLE IF NOT EXISTS courses(
+    CourseID TEXT PRIMARY KEY  NOT NULL, 
+    CourseTitle TEXT,
+    College TEXT )''')
 
 conn.close()
 
@@ -279,7 +276,7 @@ def indexCourses():
 # -- ADD METHODS --
 @app.route("/add_course",methods = ['POST','GET'])
 def add_course():
-    return render_template("add.html")
+    return render_template("add-course.html")
 
 @app.route("/add_submit_course",methods = ['POST','GET'])
 def add_submit_course():
@@ -287,36 +284,32 @@ def add_submit_course():
         
         try:
             
-            id_number = request.form['ID_Num']
-            firstname = request.form['F_Name']
-            lastname = request.form['L_Name']
-            middle = request.form['M_Name']
-            sex =request.form['sex']
-            course = request.form['course']
-            Yr = request.form['Yr_Level']
+            crs_ID = request.form['course-ID'].upper()
+            crs_title = request.form['course-title'].upper()
+            crs_college = request.form['course-college'].upper()
             
-            stud = Student(id_number,firstname,lastname,middle,sex,course,Yr)
             print("array")
             with sql.connect("database.db") as conn:
                 print("connect")
                 cur = conn.cursor()
-                cur.execute("INSERT INTO student(IDNum, FName, LName, MName, Sex, Course,YrLevel) VALUES(?,?,?,?,?,?,?)",
-                    (stud.id_no, stud.f_name, stud.l_name, stud.mid, stud.sex, stud.course,stud.Yr))
+                cur.execute("INSERT INTO courses(CourseID, CourseTitle, College) VALUES(?,?,?)",
+                    (crs_ID,crs_title,crs_college))
                 conn.commit()
-                msg= "Adding Successful!"
+                print("success stage1")
+                msg= "Adding Course Successful!"
         except:
             print(" ERROR!")
             conn.rollback()
-            msg = "Adding failed! "
+            msg = "Adding Course Failed! "
 
         finally:
             print("Final Stage")
             conn = sql.connect("database.db")
             conn.row_factory = sql.Row
             cur = conn.cursor()
-            cur.execute("SELECT * FROM student")
+            cur.execute("SELECT * FROM courses")
             rows = cur.fetchall()
-            return render_template("add_result.html", rows=rows, msg=msg,)
+            return render_template("add_result-course.html", rows=rows, msg=msg,)
             conn.close()
 # -- End Add Methods --
 
