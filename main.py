@@ -14,9 +14,8 @@ conn.execute('''CREATE TABLE IF NOT EXISTS student(
     MName TEXT,
     LName TEXT, 
     Sex TEXT, 
-    Course TEXT, 
-    YrLevel INTEGER,
-    CONSTRAINT FK_Student_Course FOREIGN KEY (Course) REFERENCES courses(CourseID)''')
+    Course TEXT REFERENCES courses(CourseID), 
+    YrLevel INTEGER)''')
 
 conn.execute('''CREATE TABLE IF NOT EXISTS courses(
     CourseID TEXT PRIMARY KEY  NOT NULL, 
@@ -61,13 +60,14 @@ def add_submit():
             
             with sql.connect("database.db") as conn:
                 cur = conn.cursor()
+                cur.execute("PRAGMA foreign_keys=ON")
                 cur.execute("INSERT INTO student(IDNum, FName, MName,  LName, Sex, Course,YrLevel) VALUES(?,?,?,?,?,?,?)",
                     (id_number,firstname,middle,lastname,sex,course,Yr))
                 conn.commit()
                 msg= "Adding Successful!"
         except:
         	conn.rollback()
-        	msg = "Adding failed! "
+        	msg = "Error adding due to foreign key constraint."
 
         finally:
         	conn = sql.connect("database.db")
@@ -320,9 +320,9 @@ def view_course():
     conn = sql.connect("database.db")
     conn.row_factory = sql.Row
     cur = conn.cursor()
-    cur.execute("SELECT * FROM student")
+    cur.execute("SELECT * FROM courses")
     rows = cur.fetchall()
-    return render_template("add_result.html", rows=rows)
+    return render_template("add_result-course.html", rows=rows)
     conn.close()
 
 
@@ -332,27 +332,29 @@ def delete_course():
     conn = sql.connect("database.db")
     conn.row_factory = sql.Row
     cur = conn.cursor()
-    cur.execute("SELECT * FROM student")
+    cur.execute("SELECT * FROM courses")
     rows_del = cur.fetchall()
     conn.close()
-    return render_template("delete.html", rows=rows_del)
+    return render_template("delete-course.html", rows=rows_del)
 
 @app.route("/delete_result_course",methods = ['POST','GET'])
 def delete_result_course():
     if request.method == "POST":
         try:
             print("entered ID")
-            id_number = request.form['ID_Num']
-            print(id_number)
+            crs_id = request.form['crs_ID'].upper()
+            print(crs_id)
             with sql.connect("database.db") as conn:
                 print("connected")
                 cur = conn.cursor()
-                cur.execute("SELECT * FROM student")
+                cur.execute("SELECT * FROM courses")
                 for row in cur.fetchall():
                     print(row)
-                    if row[0] == id_number:
-                        print("partial in del")
-                        cur.execute("DELETE FROM student WHERE IDNum = ?", (id_number,))
+                    if row[0] == crs_id:
+                        print("course found")
+                        flag=2
+                        cur.execute("PRAGMA foreign_keys=ON")
+                        cur.execute("DELETE FROM courses WHERE CourseID = ?", (crs_id,))
                         print("before commit")
                         conn.commit()
                         print("committed")
@@ -360,27 +362,27 @@ def delete_result_course():
                         flag=1
                         break
                     else:
-                        print("error delete")
+                        print("not found")
                         flag=0
-                        msg = "Error! Student not found."
+                        msg = "Error! Course not found."
                         
                         
         except:
-            msg = "Fail to delete"
+            msg = "Error! Foreign key constraint."
             print("Failed to delete!")
         finally:
-            if flag == 1:
-                print("flag 1")
+            if flag>0:
+                print("flag = " ,flag)
                 conn = sql.connect("database.db")
                 conn.row_factory = sql.Row
                 cur = conn.cursor()
-                cur.execute("SELECT * FROM student")
+                cur.execute("SELECT * FROM courses")
                 rows = cur.fetchall()
                 print(rows)
             else:
-                print("flag 0")
+                print(" flag = " ,flag)
                 rows = " "
-            return render_template("add_result.html", rows=rows, msg=msg,)
+            return render_template("add_result-course.html", rows=rows, msg=msg,)
         conn.close()
 # -- End of Delete Methods --
 
@@ -391,7 +393,7 @@ def update_course():
     conn = sql.connect("database.db")
     conn.row_factory = sql.Row
     cur = conn.cursor()
-    cur.execute("SELECT * FROM student")
+    cur.execute("SELECT * FROM courses")
     rows = cur.fetchall()
     return render_template("update.html", rows=rows)
 
