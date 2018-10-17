@@ -52,13 +52,13 @@
 <div class=" main" >
 
 <div>
-	<h1 class="search-head">Enter ID Number :</h1>
+	<h1 class="search-head">Course ID :</h1>
 </div>
 
 <div class="delete_form" id="update-body">    
-    <form action="{{url_for('update_search')}}" method = "post">
+    <form action="{{url_for('update_search_course')}}" method = "post">
           
-          <input type="text" name = "ID_Num" placeholder="  Update Student" align="left" required>
+          <input type="text" name = "courseID" placeholder="  Update Course" align="left" required>
           <button class="btn btn-warning btn-lg" id="search-submit"> <i class="fas fa-edit"></i></button> <br><br>
       </form>
 </div>
@@ -66,30 +66,22 @@
 	<div>
       <table id="stud_table" style="width:80%">
       <tr>
-        <th>ID Number</th>
-        <th>First Name</th>
-        <th>Middle Name</th>
-        <th>Last Name</th> 
-        <th>Sex</th>
-        <th>Course</th>
-        <th>Year Level</th> 
+        <th>COURSE ID</th>
+        <th>COURSE TITLE</th>
+        <th>COLLEGE</th>
       </tr>
       {% for row in rows %}
       <tr>
-        <td>{{row["IDNum"]}}</td>
-        <td>{{row["FName"]}}</td>
-        <td>{{row["MName"]}}</td>
-        <td>{{row["LName"]}}</td>
-        <td>{{row["Sex"]}}</td>
-        <td>{{row["Course"]}}</td>
-        <td>{{row["YrLevel"]}}</td>
+        <td>{{row["CourseID"]}}</td>
+        <td>{{row["CourseTitle"]}}</td>
+        <td>{{row["College"]}}</td>
       </tr>
       {% endfor %}
       </table>
     </div>
     <div class="delete_btn">
       
-     <button class="btn btn-success btn-lg" id="delete_cancel" onclick="window.location.href='/students'"> <i class="fas fa-user"> </i> Back</button>
+     <button class="btn btn-success btn-lg" id="delete_cancel" onclick="window.location.href='/courses'"> <i class="fas fa-user"> </i> Back</button>
 </div>
 
 </div>

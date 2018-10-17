@@ -58,52 +58,31 @@
             <table id="stud_table" style="width:80%">
 
             <tr>
-              <th>ID Number</th>
-              <th>First Name</th>
-              <th>Middle Name</th>
-              <th>Last Name</th> 
-              <th>Sex</th>
-              <th>Course</th>
-              <th>Year Level</th> 
+              <th>COURSE ID</th>
+              <th>COURSE TITLE</th>
+              <th>COLLEGE</th>
           
             </tr>
                 <tr>
                    <td>{{ copied[0]}}</td>
                    <td>{{ copied[1]}}</td>
                    <td>{{ copied[2]}}</td>
-                   <td>{{ copied[3]}}</td>
-                   <td>{{ copied[4]}}</td>
-                   <td>{{ copied[5]}}</td>
-                   <td>{{ copied[6]}}</td>
-
                 </tr>
                
-                </table>
-              </div>
+            </table>
+</div>
 
 <div class="add_form">    
-    <form action="{{url_for('update_submit')}}" method = "post">
+    <form action="{{url_for('update_submit_course')}}" method = "post">
         <div class="form-body">
-          <label id="ID-Old">Old ID No.  :</label>
-          <input type="text" name = "ID_old" value="{{ copied[0]}}" readonly="readonly"  align="left" >
+          <label id="ID-Old">Course ID :</label>
+          <input type="text" name="crsID" placeholder=" Ex. BS EE " align="right" >
           <br>
-          <label id="FName">First Name:</label>
-          <input type="text" name="F_Name" placeholder="Ex. Juan ,   . . ." align="right" required>
+          <label id="FName">Course Title :</label>
+          <input type="text" name="crsTitle" placeholder=" Ex. BS Electrical Engineering " align="right" >
           <br>
-          <label id="LName">Last Name:</label>
-          <input type="text" name="L_Name" placeholder="Ex. De la Cruz ,   . . ." align="right" required>
-          <br>
-          <label id="MName">Middle Name:</label>
-          <input type="text" name= "M_Name" placeholder="Ex.  Rivera ,   . . ." align="right" required>
-          <br>
-          <label id="Sex">Sex:</label>
-          <input type="text" name = "sex" placeholder="Ex. Male ,   . . ." align="right" required>
-          <br>
-          <label id="course">Course:</label>
-          <input type="text" name= "course" placeholder="Ex. BS CpE ,   . . ." align="right" required>
-          <br>
-          <label id="Yr">Year Level:</label>
-          <input type="text" name= "Yr_Level" placeholder="Ex. IV ,   . . ." align="right" required>
+          <label id="LName">College :</label>
+          <input type="text" name="college" placeholder="Ex. COET " align="right" >
           <br>
           <br>
           <button class="btn btn-warning btn-lg" id="add_submit"> <i class="far fa-id-card"></i> Update </button>
@@ -114,7 +93,7 @@
 	
 
       <br>
-     <button class="btn btn-success btn-lg" id="add_cancel" onclick="window.location.href='/students'"> <i class="fas fa-user"></i> Back</button><br>
+     <button class="btn btn-success btn-lg" id="add_cancel" onclick="window.location.href='/courses'"> <i class="fas fa-user"></i> Back</button><br>
 </div>
 	
 </div>

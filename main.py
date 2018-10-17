@@ -205,6 +205,7 @@ def update_submit():
                         if(len(sex)>0):
                             cur.execute("UPDATE student set Sex = ? where IDNum = ?",( sex, id_old))
                         if(len(course)>0):
+                            cur.execute("PRAGMA foreign_keys=ON")
                             cur.execute("UPDATE student set Course = ? where IDNum = ?",( course, id_old))
                         if(len(Yr)>0):
                             cur.execute("UPDATE student set YrLevel = ? where IDNum = ?",( Yr, id_old))
@@ -325,7 +326,6 @@ def view_course():
     return render_template("add_result-course.html", rows=rows)
     conn.close()
 
-
 # -- DELETE METHODS --
 @app.route("/delete_course", methods = ['POST', 'GET'])
 def delete_course():
@@ -395,20 +395,21 @@ def update_course():
     cur = conn.cursor()
     cur.execute("SELECT * FROM courses")
     rows = cur.fetchall()
-    return render_template("update.html", rows=rows)
+    return render_template("update-course.html", rows=rows)
 
 @app.route("/update_search_course",methods = ['POST', 'GET'])
 def update_search_course():
     if request.method == "POST":
         try:
-            id_number = request.form['ID_Num']
+            crs_ID = request.form['courseID'].upper()
             print("meeeee")
             with sql.connect("database.db") as conn:
                 print("connected")
                 cur = conn.cursor()
-                cur.execute("SELECT * FROM student")
+                cur.execute("SELECT * FROM courses")
                 for row in cur.fetchall():
-                    if row[0] == id_number:
+                    if row[0] == crs_ID:
+                        print("found")
                         print(row)
                         copied = row
                         msg = " Student Found!"
@@ -418,17 +419,16 @@ def update_search_course():
                         msg = "Error! Student not found."
                         flag=0
                         copied = " "
-
         except:
             msg1 = "ERROR"
             msg2 = " "
             copied = " "
         finally:
             if flag == 1:
-                return render_template("update_info.html", msg =msg, copied=copied, id_number=id_number, )
+                return render_template("update_info-course.html", msg =msg, copied=copied, id_number=id_number, )
                 conn.close()
             else:
-                return render_template("update_search_fail.html", msg =msg, copied=copied, id_number=id_number, )
+                return render_template("update_search_fail-course.html", msg =msg, copied=copied, id_number=id_number, )
                 conn.close()
 
 @app.route("/update_submit_course",methods = ['POST', 'GET'])
@@ -437,24 +437,24 @@ def update_submit_course():
         
         try:
             print("enter try")
-            
-            id_old = request.form['ID_old']
-            id_new = request.form['ID_Num']
+            crs_ID = request.form['F_Name']
+            crs_title = request.form['crsTitle'].upper()
+            college = request.form['college'].upper()
             print(id_old)
-            firstname = request.form['F_Name']
-            lastname = request.form['L_Name']
-            middle = request.form['M_Name']
-            sex = request.form['sex']
-            course = request.form['course']
-            Yr = request.form['Yr_Level']
+            
 
             with sql.connect("database.db") as conn:
                 cur = conn.cursor()
-                cur.execute("SELECT * FROM student")
+                cur.execute("SELECT * FROM courses")
                 for row in cur.fetchall():
                     print(row)
 
                     if row[0] == id_old:
+                        if(len(firstname)>0):
+                            cur.execute("UPDATE student set FName = ? where IDNum = ?",( firstname, id_old))
+                        if(len(lastname)>0):
+                            cur.execute("UPDATE student set LName = ? where IDNum = ?",( lastname, id_old))
+                            
                         cur.execute("UPDATE student set FName = ?, LName = ?, MName = ?,  Sex = ?, Course = ?, YrLevel = ? where IDNum = ?",
                             ( firstname, lastname, middle, sex, course,Yr,id_old))
                         conn.commit()
@@ -463,7 +463,6 @@ def update_submit_course():
                         conn.commit()
                         msg = "successfully UPDATED"
                         break
-                    
         except:
             print("Fail to update")
             msg = "FAIL to UPDATE"
@@ -505,15 +504,12 @@ def search_input_course():
                         print("Error search")
                         msg = "Error! Student not found."
                         copied = " "
-
         except:
             msg = "ERROR"
             copied=" "
         finally:
             return render_template("search_result.html", msg=msg, copied=copied, )
             conn.close()
-
-
 #----------------------------------------------------
 # End Manage Courses
 if __name__ == "__main__":
