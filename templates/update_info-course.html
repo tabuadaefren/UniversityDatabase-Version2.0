@@ -37,7 +37,7 @@
 				<a class="nav-link" href="/view">Student Table  | </a>
 			</li>
 			<li class="nav-item">
-				<a class="nav-link" href="/">Course Table  | </a>
+				<a class="nav-link" href="/view_course">Course Table  | </a>
 			</li><li class="nav-item">
 				<a class="nav-link" href="/">Final Project </a>
 			</li>
@@ -75,6 +75,9 @@
 <div class="add_form">    
     <form action="{{url_for('update_submit_course')}}" method = "post">
         <div class="form-body">
+          <label id="ID-Old">Old Course ID :</label>
+          <input type="text" name = "crsID_old" value="{{ copied[0]}}" readonly="readonly"  align="left" >
+          <br>
           <label id="ID-Old">Course ID :</label>
           <input type="text" name="crsID" placeholder=" Ex. BS EE " align="right" >
           <br>
@@ -85,7 +88,7 @@
           <input type="text" name="college" placeholder="Ex. COET " align="right" >
           <br>
           <br>
-          <button class="btn btn-warning btn-lg" id="add_submit"> <i class="far fa-id-card"></i> Update </button>
+          <button class="btn btn-warning btn-lg" id="add_submit"> <i class="far fa-id-card"></i> Update Course</button>
         </div>
       </form>
 </div>

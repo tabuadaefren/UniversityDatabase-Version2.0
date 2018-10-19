@@ -23,7 +23,7 @@
 	
 </head>
 
-<body>
+<body id="search_main">
 
 <center>
 
@@ -39,7 +39,7 @@
 				<a class="nav-link" href="/view">Student Table  | </a>
 			</li>
 			<li class="nav-item">
-				<a class="nav-link" href="/">Course Table  | </a>
+				<a class="nav-link" href="/view_course">Course Table  | </a>
 			</li><li class="nav-item">
 				<a class="nav-link" href="/">Final Project </a>
 			</li>
@@ -50,17 +50,17 @@
 </div>
 </nav>
 
-<div class="carousel-inner main" id="search_main">
+<div class="carousel-inner main" >
 
 <div class="search-body">
 
 <div class="search-title">
 	<br>
-	<h1 class="search-head">Enter Search Key:</h1>
+	<h1 class="search-head">Enter Search Key :</h1>
 </div>
 
 <div class="search-form">    
-    <form action="{{url_for('search_input')}}" method = "post">
+    <form action="{{url_for('search_input_course')}}" method = "post">
         <input type="text" name = "SearchKey" placeholder="     Search Course" align="left" required>
         <button class="btn btn-warning btn-lg" id="search-submit"><i class="fa fa-search"></i></button>
          <br><br>
@@ -68,7 +68,7 @@
 </div>
 <div class="search-back">
 	   
-     <button class="btn btn-success btn-lg" id="search-cancel" onclick="window.location.href='/students'"> <i class="fas fa-arrow-alt-circle-left"></i> Back</button><br><br>
+     <button class="btn btn-success btn-lg" id="search-cancel" onclick="window.location.href='/courses'"> <i class="fas fa-arrow-alt-circle-left"></i> Back</button><br><br>
 </div>
 	
 </div>	

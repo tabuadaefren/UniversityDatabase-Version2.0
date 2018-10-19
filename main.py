@@ -14,7 +14,7 @@ conn.execute('''CREATE TABLE IF NOT EXISTS student(
     MName TEXT,
     LName TEXT, 
     Sex TEXT, 
-    Course TEXT REFERENCES courses(CourseID), 
+    Course TEXT REFERENCES courses(CourseID) ON DELETE RESTRICT, 
     YrLevel INTEGER)''')
 
 conn.execute('''CREATE TABLE IF NOT EXISTS courses(
@@ -196,6 +196,11 @@ def update_submit():
                 cur.execute("SELECT * FROM student")
                 for row in cur.fetchall():
                     if row[0] == id_old:
+                        if(len(course)>0):
+                            print("before pragma")
+                            cur.execute("PRAGMA foreign_keys=ON")
+                            print("entered after pragma")
+                            cur.execute("UPDATE student set Course = ? where IDNum = ?",( course, id_old))
                         if(len(firstname)>0):
                             cur.execute("UPDATE student set FName = ? where IDNum = ?",( firstname, id_old))
                         if(len(lastname)>0):
@@ -204,9 +209,6 @@ def update_submit():
                             cur.execute("UPDATE student set MName = ? where IDNum = ?",( middle, id_old))
                         if(len(sex)>0):
                             cur.execute("UPDATE student set Sex = ? where IDNum = ?",( sex, id_old))
-                        if(len(course)>0):
-                            cur.execute("PRAGMA foreign_keys=ON")
-                            cur.execute("UPDATE student set Course = ? where IDNum = ?",( course, id_old))
                         if(len(Yr)>0):
                             cur.execute("UPDATE student set YrLevel = ? where IDNum = ?",( Yr, id_old))
                         conn.commit()
@@ -425,10 +427,15 @@ def update_search_course():
             copied = " "
         finally:
             if flag == 1:
-                return render_template("update_info-course.html", msg =msg, copied=copied, id_number=id_number, )
+                return render_template("update_info-course.html", msg =msg, copied=copied,  )
                 conn.close()
             else:
-                return render_template("update_search_fail-course.html", msg =msg, copied=copied, id_number=id_number, )
+                conn = sql.connect("database.db")
+                conn.row_factory= sql.Row
+                cur = conn.cursor()
+                cur.execute("SELECT * FROM courses")
+                rows = cur.fetchall()
+                return render_template("update_search_fail-course.html", msg =msg, rows=rows,  )
                 conn.close()
 
 @app.route("/update_submit_course",methods = ['POST', 'GET'])
@@ -437,10 +444,11 @@ def update_submit_course():
         
         try:
             print("enter try")
-            crs_ID = request.form['F_Name']
+            crs_ID_old = request.form['crsID_old'].upper()
+            crs_ID = request.form['crsID'].upper()
             crs_title = request.form['crsTitle'].upper()
             college = request.form['college'].upper()
-            print(id_old)
+            print(crs_ID_old)
             
 
             with sql.connect("database.db") as conn:
@@ -449,30 +457,34 @@ def update_submit_course():
                 for row in cur.fetchall():
                     print(row)
 
-                    if row[0] == id_old:
-                        if(len(firstname)>0):
-                            cur.execute("UPDATE student set FName = ? where IDNum = ?",( firstname, id_old))
-                        if(len(lastname)>0):
-                            cur.execute("UPDATE student set LName = ? where IDNum = ?",( lastname, id_old))
-                            
-                        cur.execute("UPDATE student set FName = ?, LName = ?, MName = ?,  Sex = ?, Course = ?, YrLevel = ? where IDNum = ?",
-                            ( firstname, lastname, middle, sex, course,Yr,id_old))
+                    if row[0] == crs_ID_old:
+                        if(len(crs_title)>0):
+                            print("before update title")
+                            cur.execute("UPDATE courses set CourseTitle = ? where CourseID = ?",( crs_title, crs_ID_old))
+                            print("after update title")
+                        if(len(college)>0):
+                            print("before update college")
+                            cur.execute("UPDATE courses set College = ? where CourseID = ?",( college, crs_ID_old))
+                            print("after update college")
+                        if(len(crs_ID)>0):
+                            print("before pragma")
+                            cur.execute("PRAGMA foreign_keys=ON")
+                            print("after pragma")
+                            cur.execute("UPDATE courses set CourseID = ? where CourseID = ?",( crs_ID, crs_ID_old))
+                            print("after update")   
                         conn.commit()
-                        cur.execute("UPDATE student set IDNum=? where FName = ? and LName = ?",
-                            (id_new, firstname, lastname))
-                        conn.commit()
-                        msg = "successfully UPDATED"
+                        msg = "Successfully Udated"
                         break
         except:
             print("Fail to update")
-            msg = "FAIL to UPDATE"
+            msg = "FAILED TO UPDATE"
         finally:
             conn = sql.connect("database.db")
             conn.row_factory = sql.Row
             cur = conn.cursor()
-            cur.execute("SELECT * FROM student")
+            cur.execute("SELECT * FROM courses")
             rows = cur.fetchall()
-            return render_template("update_success.html", rows=rows, msg=msg)
+            return render_template("update_success-course.html", rows=rows, msg=msg)
             conn.close()
 # -- End of Update Methods --
 
@@ -480,38 +492,41 @@ def update_submit_course():
 # -- SEARCH METHODS --
 @app.route("/search_course",methods = ['POST', 'GET'])
 def search_course():
-    return render_template("search.html")
+    return render_template("search-course.html")
 
 @app.route("/search_input_course",methods = ['POST', 'GET'])
 def search_input_course():
     if request.method == "POST":
         try:
+            print("try entered")
             count=0
-            id_number = request.form['ID_Num']
-            print("meeeee")
+            SearchKey = request.form['SearchKey'].upper()
+            print(SearchKey)
             with sql.connect("database.db") as conn:
-                print("connected")
                 cur = conn.cursor()
-                cur.execute("SELECT * FROM student")
-                for row in cur.fetchall():
-                    if row[0] == id_number:
-                        print(len(row))
-                        copied = row
-                        print("search successful")
-                        msg = "Search successful!"
-                        break
-                    else:
-                        print("Error search")
-                        msg = "Error! Student not found."
-                        copied = " "
+                print("sql execute")
+                cur.execute("SELECT * FROM courses where CourseID = ? or CourseTitle = ? or College=?", (SearchKey, SearchKey, SearchKey ))
+                print("finish search database")
+                row = cur.fetchall()
+                print("entered in success")
+                print(row)
+                print(len(row))
         except:
-            msg = "ERROR"
-            copied=" "
+            print("entered in failed")
         finally:
-            return render_template("search_result.html", msg=msg, copied=copied, )
+            if(len(row)<1):
+                msg="Student not found!"
+                print("entered if")
+                row= " "
+            else:
+                msg="Search successful!"
+                print("entered else")
+            return render_template("search_result-course.html", msg=msg, row=row,)
             conn.close()
 #----------------------------------------------------
 # End Manage Courses
+
+
 if __name__ == "__main__":
     app.run(debug=True)
     

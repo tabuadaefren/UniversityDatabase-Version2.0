@@ -17,7 +17,7 @@
 	<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename = 'style.css')}}">
 </head>
 
-<body>
+<body id="add_main">
 
 <center>
 
@@ -33,7 +33,7 @@
 				<a class="nav-link" href="/view">Student Table  | </a>
 			</li>
 			<li class="nav-item">
-				<a class="nav-link" href="/">Course Table | </a>
+				<a class="nav-link" href="/view_course">Course Table | </a>
 			</li><li class="nav-item">
 				<a class="nav-link" href="/">Final Project </a>
 			</li>
@@ -44,7 +44,7 @@
 </div>
 </nav>
 
-<div class="carousel-inner main" id="add_main">
+<div class="carousel-inner main" >
 
 <div>
 	<br><h1 class="add_head"> {{msg}} </h1>
@@ -54,24 +54,15 @@
             <table id="stud_table" style="width:80%">
 
             <tr>
-              <th>ID Number</th>
-              <th>First Name</th>
-              <th>Middle Name</th>
-              <th>Last Name</th> 
-              <th>Sex</th>
-              <th>Course</th>
-              <th>Year Level</th> 
-          
+              <th>COURSE ID</th>
+              <th>COURSE TITLE</th>
+              <th>COLLEGE</th>
+
             </tr>
                 <tr>
-                   <td>{{ copied[0]}}</td>
-                   <td>{{ copied[1]}}</td>
-                   <td>{{ copied[2]}}</td>
-                   <td>{{ copied[3]}}</td>
-                   <td>{{ copied[4]}}</td>
-                   <td>{{ copied[5]}}</td>
-                   <td>{{ copied[6]}}</td>
-
+                   <td>{{ rows[0]}}</td>
+                   <td>{{ rows[1]}}</td>
+                   <td>{{ rows[2]}}</td>
                 </tr>
                
                 </table>
